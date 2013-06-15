@@ -36,10 +36,10 @@ public class ImageSpiral extends ImageSpots2 {
 	/* Missed bottom of each spiral.*/
 	private void spiral(final int xCo, final int yCo, BufferedImage completePic, int toSpread,
 			int length) {
-		if(length > 1) return;
+		if(length > 10) return;
 //		if (r.nextFloat() > 0.9)
 //			return;
-		int x = xCo + length;
+		int x = xCo + length + 1;
 		int y = yCo;
 		/* Does right side of spiral */
 		for (int i = 0; i <= length; i++) {
@@ -49,7 +49,7 @@ public class ImageSpiral extends ImageSpots2 {
 			}
 		}
 		x = xCo;
-		y = yCo-length;
+		y = yCo-length -1;
 		/* Does top side of spiral */
 		for (int i = 0; i <= length; i++) {
 			if (inBounds(x, y - i, completePic) && completedPixels[x][y-i] == false) {
@@ -57,7 +57,7 @@ public class ImageSpiral extends ImageSpots2 {
 				completedPixels[x][y - i] = true;
 			}
 		}
-		x = xCo-length;
+		x = xCo-length -1;
 		y = yCo;
 		/* Does left side of spiral */
 		for (int i = 0; i <= length; i++) {
@@ -67,7 +67,7 @@ public class ImageSpiral extends ImageSpots2 {
 			}
 		}
 		x = xCo;
-		y = yCo+length;
+		y = yCo+length +1;
 		/* Does bottom side of spiral */
 
 		for (int i = 0; i <= length; i++) {

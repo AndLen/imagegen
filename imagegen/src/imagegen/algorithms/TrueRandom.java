@@ -12,7 +12,7 @@ import javax.swing.JTextArea;
  * @author Andrew
  *
  */
-public class TrueRandom extends AbstractImage {
+public class TrueRandom extends AbstractAlgorithm {
 
 	public TrueRandom(AbstractColour colGen, int xSize, int ySize,
 			JTextArea textArea) {

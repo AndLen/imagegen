@@ -11,7 +11,7 @@ import javax.swing.JTextArea;
  * generates an image given an AbstractColour object.
  * @author Andrew 
  */
-public abstract class AbstractImage {
+public abstract class AbstractAlgorithm {
 	protected AbstractColour colGen;
 	protected int xSize, ySize;
 	protected JTextArea textArea;
@@ -26,7 +26,7 @@ public abstract class AbstractImage {
 	 * @param textArea
 	 *            To display % progress etc.
 	 */
-	public AbstractImage(AbstractColour colGen, int xSize, int ySize, JTextArea textArea) {
+	public AbstractAlgorithm(AbstractColour colGen, int xSize, int ySize, JTextArea textArea) {
 		this.colGen = colGen;
 		this.xSize = xSize;
 		this.ySize = ySize;

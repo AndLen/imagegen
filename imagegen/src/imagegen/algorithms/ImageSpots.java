@@ -15,7 +15,7 @@ import javax.swing.JTextArea;
  * 
  * @author Andrew
  */
-public class ImageSpots extends AbstractImage {
+public class ImageSpots extends AbstractAlgorithm {
 	Random r;
 	boolean[][] completedPixels;
 
@@ -31,7 +31,7 @@ public class ImageSpots extends AbstractImage {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see imagegen.algorithms.AbstractImage#generate()
+	 * @see imagegen.algorithms.AbstractAlgorithm#generate()
 	 */
 	@Override
 	public BufferedImage generate() {

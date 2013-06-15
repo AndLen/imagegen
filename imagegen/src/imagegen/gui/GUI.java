@@ -1,7 +1,7 @@
 package imagegen.gui;
 
 import imagegen.actions.Responder;
-import imagegen.algorithms.AbstractImage;
+import imagegen.algorithms.AbstractAlgorithm;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -83,7 +83,7 @@ public class GUI {
 	 * @param pixelSize
 	 *            1 = 1x1 pixels, 2 = 2x2 pixels etc.
 	 */
-	public synchronized void drawImage(AbstractImage imgGen, int pixelSize) {
+	public synchronized void drawImage(AbstractAlgorithm imgGen, int pixelSize) {
 		BufferedImage toDraw = imgGen.generate();
 		int scaledWidth = toDraw.getWidth() * pixelSize;
 		int scaledHeight = toDraw.getHeight() * pixelSize;
@@ -242,10 +242,10 @@ public class GUI {
 		buttonPanel.add(btnSaveAll);
 
 		textArea = new JTextArea();
-		textArea.setMaximumSize(new Dimension(80, 300));
+		textArea.setWrapStyleWord(true);
+		textArea.setMaximumSize(new Dimension(80, 30000));
 		textArea.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 		textArea.setEditable(false);
-		textArea.setPreferredSize(new Dimension(80, 400));
 		textArea.setColumns(7);
 		textArea.setMinimumSize(new Dimension(80, 300));
 		buttonPanel.add(textArea);
@@ -253,9 +253,9 @@ public class GUI {
 		JScrollPane textscrollPane = new JScrollPane(textArea);
 		textscrollPane.setPreferredSize(new Dimension(82, 300));
 		textscrollPane.setMinimumSize(new Dimension(80, 300));
-		textscrollPane.setAutoscrolls(true);
 		textscrollPane
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		textscrollPane.setAutoscrolls(true);
 		buttonPanel.add(textscrollPane);
 
 		imagePanel = new ImagePanel();
@@ -350,20 +350,29 @@ public class GUI {
 	}
 
 	public synchronized void averageImages() {
+		if (history.size() < 1) {
+			textArea.append("No images!\n");
+			return;
+		}
 		int[] smallest = smallestIndices();
 		int xSize = smallest[0];
 		int ySize = smallest[1];
 		int size = history.size();
 		BufferedImage result = new BufferedImage(xSize, ySize,
 				BufferedImage.TYPE_INT_RGB);
-/*Skips extra pixels (when an image smaller than others)
- * rather than averaging those...hrm.. */
+		/*
+		 * Skips extra pixels (when an image smaller than others) rather than
+		 * averaging those...hrm..
+		 */
+		List<Integer> printed = new ArrayList<Integer>();
 		for (int i = 0; i < xSize; i++) {
+			printProgress(i, xSize, printed);
 			for (int j = 0; j < ySize; j++) {
 				int red = 0;
 				int blue = 0;
 				int green = 0;
 				for (BufferedImage b : history) {
+
 					Color pixel = new Color(b.getRGB(i, j));
 					red += pixel.getRed();
 					blue += pixel.getBlue();
@@ -374,7 +383,27 @@ public class GUI {
 				result.setRGB(i, j, newColour.getRGB());
 			}
 		}
+		textArea.append(100 + " % done\n");
 		paintImage(result);
+	}
+
+	/**
+	 * Can be used to print the current progress to the text pane. Will only
+	 * print in 10% increments.
+	 * 
+	 * @param current
+	 * @param total
+	 * @param printed
+	 *            List of percentages printed thus far.
+	 */
+	public static void printProgress(int current, int total,
+			List<Integer> printed) {
+		int percDone = (int) ((double) current / total * 100);
+		// Print progress every 10%
+		if (percDone % 10 == 0 && !printed.contains(percDone)) {
+			textArea.append(percDone + " % done\n");
+			printed.add(percDone);
+		}
 	}
 
 	private int[] smallestIndices() {

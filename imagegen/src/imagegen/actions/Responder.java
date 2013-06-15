@@ -83,7 +83,7 @@ public class Responder implements ActionListener, ChangeListener {
 			gui.nextImage();
 			return;
 		}
-		AbstractImage imgGen;
+		AbstractAlgorithm imgGen;
 		/*
 		 * Now generate the appropriate image! Done separate to above so will
 		 * re-draw whenever any button is pressed.
