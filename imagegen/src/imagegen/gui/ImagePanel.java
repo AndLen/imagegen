@@ -60,7 +60,7 @@ public class ImagePanel extends JPanel {
 	 * @param image
 	 *            Image to draw
 	 */
-	public void updatePanel(BufferedImage image) {
+	public synchronized void updatePanel(BufferedImage image) {
 		this.image = image;
 	}
 

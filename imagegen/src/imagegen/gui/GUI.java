@@ -83,7 +83,7 @@ public class GUI {
 	 * @param pixelSize
 	 *            1 = 1x1 pixels, 2 = 2x2 pixels etc.
 	 */
-	public void drawImage(AbstractImage imgGen, int pixelSize) {
+	public synchronized void drawImage(AbstractImage imgGen, int pixelSize) {
 		BufferedImage toDraw = imgGen.generate();
 		int scaledWidth = toDraw.getWidth() * pixelSize;
 		int scaledHeight = toDraw.getHeight() * pixelSize;
@@ -98,7 +98,7 @@ public class GUI {
 		paintImage(scaled);
 	}
 
-	public void paintImage(BufferedImage toAdd) {
+	public synchronized void paintImage(BufferedImage toAdd) {
 		imagePanel.updatePanel(toAdd);
 		imagePanel.update(imagePanel.getGraphics());
 		history.add(toAdd);
@@ -321,7 +321,7 @@ public class GUI {
 		}
 	}
 
-	public void saveAllImages() {
+	public synchronized void saveAllImages() {
 		if (history.isEmpty()) {
 			System.out.println("No images to save");
 			return;
@@ -349,7 +349,7 @@ public class GUI {
 
 	}
 
-	public void averageImages() {
+	public synchronized void averageImages() {
 		int[] smallest = smallestIndices();
 		int xSize = smallest[0];
 		int ySize = smallest[1];
