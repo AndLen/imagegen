@@ -31,7 +31,10 @@ public class Responder implements ActionListener, ChangeListener {
 		this.gui = gui;
 	}
 
-	
+	/* 
+	 * 
+	 * @author Michael Baird
+	 */
 	@Override
 	
 	public void actionPerformed(ActionEvent e) {
