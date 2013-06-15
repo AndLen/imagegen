@@ -32,6 +32,7 @@ public class Responder implements ActionListener, ChangeListener {
 	}
 
 	/* 
+	 * 
 	 * @author Michael Baird
 	 */
 	@Override
