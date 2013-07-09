@@ -1,6 +1,7 @@
 package imagegen.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
@@ -51,6 +52,20 @@ public class ImagePanel extends JPanel {
 		if (image == null)
 			initialise();
 		g.drawImage(image, 0, 0, null);
+	}
+
+	public Dimension getPreferredSize() {
+		if (image != null) {
+			return new Dimension(image.getWidth(), image.getHeight());
+		}
+		return super.getPreferredSize();
+	}
+
+	public Dimension getMinimumSize() {
+		if (image != null) {
+			return new Dimension(image.getWidth(), image.getHeight());
+		}
+		return super.getMinimumSize();
 	}
 
 	/**

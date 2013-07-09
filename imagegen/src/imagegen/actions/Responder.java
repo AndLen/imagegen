@@ -31,12 +31,11 @@ public class Responder implements ActionListener, ChangeListener {
 		this.gui = gui;
 	}
 
-	/* 
+	/*
 	 * 
 	 * @author Michael Baird
 	 */
 	@Override
-	
 	public void actionPerformed(ActionEvent e) {
 		final String actionCommand = e.getActionCommand();
 
@@ -46,7 +45,8 @@ public class Responder implements ActionListener, ChangeListener {
 			}
 		}).start();
 	}
-	/* 
+
+	/*
 	 * @author Andrew
 	 */
 	public void buttonPerformed(String actionCommand) {
@@ -76,11 +76,8 @@ public class Responder implements ActionListener, ChangeListener {
 		} else if (actionCommand.equals("Save All")) {
 			gui.saveAllImages();
 			return;
-		} else if (actionCommand.equals("Previous Image")) {
-			gui.prevImage();
-			return;
-		} else if (actionCommand.equals("Next Image")) {
-			gui.nextImage();
+		} else if (actionCommand.equals("History")) {
+			gui.historyGUI();
 			return;
 		}
 		AbstractAlgorithm imgGen;

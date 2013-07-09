@@ -221,15 +221,10 @@ public class GUI {
 		btnAv.setAlignmentX(0.5f);
 		buttonPanel.add(btnAv);
 
-		JButton btnPrev = new JButton("Previous Image");
-		btnPrev.addActionListener(r);
-		btnPrev.setAlignmentX(0.5f);
-		buttonPanel.add(btnPrev);
-
-		JButton btnNext = new JButton("Next Image");
-		btnNext.addActionListener(r);
-		btnNext.setAlignmentX(0.5f);
-		buttonPanel.add(btnNext);
+		JButton btnHist = new JButton("History");
+		btnHist.addActionListener(r);
+		btnHist.setAlignmentX(0.5f);
+		buttonPanel.add(btnHist);
 
 		JButton btnSave = new JButton("Save Image");
 		btnSave.addActionListener(r);
@@ -319,6 +314,17 @@ public class GUI {
 			imagePanel.updatePanel(history.get(historyIndex));
 			imagePanel.update(imagePanel.getGraphics());
 		}
+	}
+	
+	public void goToImage(int index){
+		if(index < 0 || index >= history.size()) return;
+		historyIndex = index;
+		imagePanel.updatePanel(history.get(historyIndex));
+		imagePanel.update(imagePanel.getGraphics());
+	}
+	
+	public void historyGUI(){
+		new HistoryGUI(history,this);
 	}
 
 	public synchronized void saveAllImages() {
