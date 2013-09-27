@@ -35,7 +35,7 @@ public class ImageSpots2 extends ImageSpots {
 		int originalI = i;
 		int originalJ = j;
 		do {
-			float rand = r.nextFloat();
+			double rand = random.nextDouble();
 			if (rand < 0.125) {
 				i--;
 			} else if (rand < 0.25) {

@@ -33,7 +33,7 @@ public class Responder implements ActionListener, ChangeListener {
 
 	/*
 	 * 
-	 * @author Michael Baird
+	 * @author Andrew & Michael Baird
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -93,11 +93,11 @@ public class Responder implements ActionListener, ChangeListener {
 			imgGen = new ImageSpots2(colourType, width / pixelSize, height
 					/ pixelSize, gui.getTextArea());
 		} else if (imageType.equals("Spiral")) {
-			imgGen = new ImageSpiral(colourType, width / pixelSize, height
+			imgGen = new ImageDiamond(colourType, width / pixelSize, height
 					/ pixelSize, gui.getTextArea());
 		} else {
 			imgGen = new TrueRandom(colourType, width / pixelSize, height
-					/ pixelSize, gui.getTextArea());
+					/ pixelSize);
 		}
 		gui.drawImage(imgGen, pixelSize);
 	}

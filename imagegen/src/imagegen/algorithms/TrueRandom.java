@@ -5,18 +5,29 @@ import imagegen.imageColours.AbstractColour;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JTextArea;
-
 /**
  * A truly random image - no algorithm applied to the pixels given by AbstractColour.
  * @author Andrew
  *
  */
-public class TrueRandom extends AbstractAlgorithm {
+public class TrueRandom implements AbstractAlgorithm {
+	private final AbstractColour colGen;
+	private final int xSize, ySize;
 
-	public TrueRandom(AbstractColour colGen, int xSize, int ySize,
-			JTextArea textArea) {
-		super(colGen, xSize, ySize, textArea);
+	/**
+	 * @param colGen
+	 *            to use in the algorithm.
+	 * @param xSize
+	 *            width of image (# of pixels)
+	 * @param ySize
+	 *            height of image (# of pixels)
+	 * @param textArea
+	 *            To display % progress etc.
+	 */
+	public TrueRandom(AbstractColour colGen, int xSize, int ySize) {
+		this.colGen = colGen;
+		this.xSize = xSize;
+		this.ySize = ySize;
 	}
 
 	@Override

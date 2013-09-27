@@ -424,4 +424,8 @@ public class GUI {
 		}
 		return smallest;
 	}
+	
+	public static void temp(){
+		File f = new File("words.txt");
+	}
 }

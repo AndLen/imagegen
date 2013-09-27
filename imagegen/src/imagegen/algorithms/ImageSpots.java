@@ -15,17 +15,47 @@ import javax.swing.JTextArea;
  * 
  * @author Andrew
  */
-public class ImageSpots extends AbstractAlgorithm {
-	Random r;
+public class ImageSpots implements AbstractAlgorithm {
+	final Random random;
+	// Special implementation that allows the user to weight how "random" an
+	// image (how many iterations, essentially). Should not be used if we want
+	// 0 <= value <= 1 && uniformly distributed in this range! Assumptions
+	// cannot be made about the value going over a certain factor or you risk a
+	// stack overflow.
+	final Random adjustableRandom;
+	// If a pixel has already been coloured - we don't want to overwrite or else
+	// we lose patterns
 	boolean[][] completedPixels;
 
+	protected AbstractColour colGen;
+	protected int xSize, ySize;
+	protected JTextArea textArea;
+
 	/**
-	 * See interface.
+	 * @param colGen
+	 *            to use in the algorithm.
+	 * @param xSize
+	 *            width of image (# of pixels)
+	 * @param ySize
+	 *            height of image (# of pixels)
+	 * @param textArea
+	 *            To display % progress etc.
 	 */
 	public ImageSpots(AbstractColour colGen, int xSize, int ySize,
 			JTextArea textArea) {
-		super(colGen, xSize, ySize, textArea);
-		r = new Random();
+		this.colGen = colGen;
+		this.xSize = xSize;
+		this.ySize = ySize;
+		this.textArea = textArea;
+
+		random = new Random();
+		adjustableRandom = new Random() {
+			private static final long serialVersionUID = 1L;
+
+			public double nextDouble() {
+				return super.nextDouble() * RANDOM_FACTOR;
+			}
+		};
 	}
 
 	/*
@@ -37,6 +67,7 @@ public class ImageSpots extends AbstractAlgorithm {
 	public BufferedImage generate() {
 		BufferedImage completePic = new BufferedImage(xSize, ySize,
 				BufferedImage.TYPE_INT_RGB);
+		// initialises to false
 		completedPixels = new boolean[xSize][ySize];
 		for (int i = 0; i < xSize; i++) {
 			for (int j = 0; j < ySize; j++) {
@@ -66,7 +97,9 @@ public class ImageSpots extends AbstractAlgorithm {
 	 *            RGB colour representation of the pixel we're on.
 	 */
 	protected void spots(int i, int j, BufferedImage completePic, int toSpread) {
-		for (float rand = r.nextFloat(); rand < 0.9; rand = r.nextFloat()) {
+		// 10% chance to stop, 90% chance to keep going on each iteration
+		for (double rand = random.nextDouble(); rand < 0.9; rand = random
+				.nextDouble()) {
 			if (rand < 0.225) {
 				i--;
 			} else if (rand < 0.450) {
@@ -76,7 +109,7 @@ public class ImageSpots extends AbstractAlgorithm {
 			} else {
 				j++;
 			}
-			if (inBounds(i, j, completePic) && completedPixels[i][j]==false) {
+			if (inBounds(i, j, completePic) && completedPixels[i][j] == false) {
 				completePic.setRGB(i, j, toSpread);
 				completedPixels[i][j] = true;
 			}
