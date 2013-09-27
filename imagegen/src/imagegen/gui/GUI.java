@@ -56,15 +56,15 @@ public class GUI {
 	/* Should be given to all components for I/O. */
 	private Responder r;
 	private ImagePanel imagePanel;
+	private final SettingsGUI settings = new SettingsGUI(this);
 	/*
 	 * For future use - undoing, seeing previous images etc. Maybe should be a
 	 * list if we want to go back and forwards?
 	 */
 	private List<BufferedImage> history = new ArrayList<BufferedImage>();
 	private int historyIndex = 0;
-	JSlider sizeSlider;
 	private static JTextArea textArea;
-
+	private double scaleSize = 1;
 	private JPanel buttonPanel;
 
 	/**
@@ -80,19 +80,19 @@ public class GUI {
 	 * 
 	 * @param imgGen
 	 *            Image Generator to use to draw the picture.
-	 * @param pixelSize
+	 * @param scalelSize
 	 *            1 = 1x1 pixels, 2 = 2x2 pixels etc.
 	 */
-	public synchronized void drawImage(AbstractAlgorithm imgGen, int pixelSize) {
+	public synchronized void drawImage(AbstractAlgorithm imgGen, double scale) {
 		BufferedImage toDraw = imgGen.generate();
-		int scaledWidth = toDraw.getWidth() * pixelSize;
-		int scaledHeight = toDraw.getHeight() * pixelSize;
+		int scaledWidth = (int) (toDraw.getWidth() * scale);
+		int scaledHeight = (int) (toDraw.getHeight() * scale);
 		BufferedImage scaled = new BufferedImage(scaledWidth, scaledHeight,
 				BufferedImage.TYPE_INT_RGB);
 
 		for (int i = 0; i < scaledWidth; i++) {
 			for (int j = 0; j < scaledHeight; j++) {
-				scaled.setRGB(i, j, toDraw.getRGB(i / pixelSize, j / pixelSize));
+				scaled.setRGB(i, j, toDraw.getRGB((int)(i / scale),(int) (j / scale)));
 			}
 		}
 		paintImage(scaled);
@@ -110,15 +110,6 @@ public class GUI {
 	 */
 	public List<BufferedImage> getHistory() {
 		return history;
-	}
-
-	/**
-	 * Slider corresponding to pixel size.
-	 * 
-	 * @return pixel slider.
-	 */
-	public JSlider getSlider() {
-		return sizeSlider;
 	}
 
 	/**
@@ -204,17 +195,15 @@ public class GUI {
 		btnSpots2.setAlignmentX(0.5f);
 		buttonPanel.add(btnSpots2);
 
-		JButton btnSpiral = new JButton("Spiral");
-		btnSpiral.addActionListener(r);
-		btnSpiral.setAlignmentX(0.5f);
-		buttonPanel.add(btnSpiral);
+		JButton btnDiamond = new JButton("Diamond");
+		btnDiamond.addActionListener(r);
+		btnDiamond.setAlignmentX(0.5f);
+		buttonPanel.add(btnDiamond);
 
-		sizeSlider = new JSlider(1, 5, 1);
-		sizeSlider.addChangeListener(r);
-		sizeSlider.setMinimumSize(new Dimension(100, 23));
-		sizeSlider.setMaximumSize(new Dimension(100, 23));
-		sizeSlider.setPreferredSize(new Dimension(100, 23));
-		buttonPanel.add(sizeSlider);
+		JButton btnSettings = new JButton("Settings");
+		btnSettings.addActionListener(r);
+		btnSettings.setAlignmentX(0.5f);
+		buttonPanel.add(btnSettings);
 
 		JButton btnAv = new JButton("Average Image");
 		btnAv.addActionListener(r);
@@ -402,7 +391,7 @@ public class GUI {
 	 * @param printed
 	 *            List of percentages printed thus far.
 	 */
-	public static void printProgress(int current, int total,
+	private void printProgress(int current, int total,
 			List<Integer> printed) {
 		int percDone = (int) ((double) current / total * 100);
 		// Print progress every 10%
@@ -413,7 +402,7 @@ public class GUI {
 	}
 
 	private int[] smallestIndices() {
-		int[] smallest = new int[] { 10000, 10000 };
+		int[] smallest = new int[] { Integer.MAX_VALUE, Integer.MAX_VALUE };
 
 		for (BufferedImage b : history) {
 			if (b.getWidth() < smallest[0])
@@ -424,8 +413,19 @@ public class GUI {
 		}
 		return smallest;
 	}
-	
-	public static void temp(){
-		File f = new File("words.txt");
+
+	public void showSettings() {
+		settings.showSettings();
+		
+	}
+
+	public void updateSize(double d) {
+		scaleSize = d+1;
+		r.render();
+		
+	}
+
+	public double getScaleSize() {
+		return scaleSize;
 	}
 }

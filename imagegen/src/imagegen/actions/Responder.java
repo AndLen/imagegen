@@ -16,12 +16,11 @@ import javax.swing.event.ChangeListener;
  * 
  * @author Andrew
  */
-public class Responder implements ActionListener, ChangeListener {
+public class Responder implements ActionListener {
 
 	private AbstractColour colourType;
 	private GUI gui;
 	private String imageType;
-	private int pixelSize;
 
 	/**
 	 * @param gui
@@ -65,8 +64,11 @@ public class Responder implements ActionListener, ChangeListener {
 			imageType = "Spots";
 		} else if (actionCommand.equals("Spots 2")) {
 			imageType = "Spots 2";
-		} else if (actionCommand.equals("Spiral")) {
+		} else if (actionCommand.equals("Diamond")) {
 			imageType = "Spiral";
+		} else if (actionCommand.equals("Settings")) {
+			gui.showSettings();
+			return;
 		} else if (actionCommand.equals("Average Image")) {
 			gui.averageImages();
 			return;
@@ -80,26 +82,32 @@ public class Responder implements ActionListener, ChangeListener {
 			gui.historyGUI();
 			return;
 		}
+		render();
+
+	}
+
+	public void render() {
 		AbstractAlgorithm imgGen;
 		/*
 		 * Now generate the appropriate image! Done separate to above so will
 		 * re-draw whenever any button is pressed.
 		 */
-		int width = gui.imageWidth(), height = gui.imageHeight();
+		double scaleSize = gui.getScaleSize();
+		int width = (int) (gui.imageWidth() / scaleSize), height = (int) (gui
+				.imageHeight() / scaleSize);
 		if (imageType.equals("Spots")) {
-			imgGen = new ImageSpots(colourType, width / pixelSize, height
-					/ pixelSize, gui.getTextArea());
+			imgGen = new ImageSpots(colourType, width, height,
+					gui.getTextArea());
 		} else if (imageType.equals("Spots 2")) {
-			imgGen = new ImageSpots2(colourType, width / pixelSize, height
-					/ pixelSize, gui.getTextArea());
+			imgGen = new ImageSpots2(colourType, width, height,
+					gui.getTextArea());
 		} else if (imageType.equals("Spiral")) {
-			imgGen = new ImageDiamond(colourType, width / pixelSize, height
-					/ pixelSize, gui.getTextArea());
+			imgGen = new ImageDiamond(colourType, width, height,
+					gui.getTextArea());
 		} else {
-			imgGen = new TrueRandom(colourType, width / pixelSize, height
-					/ pixelSize);
+			imgGen = new TrueRandom(colourType, width, height);
 		}
-		gui.drawImage(imgGen, pixelSize);
+		gui.drawImage(imgGen, scaleSize);
 	}
 
 	/**
@@ -110,14 +118,6 @@ public class Responder implements ActionListener, ChangeListener {
 	public void setUp() {
 		colourType = new Monotone();
 		imageType = "Random";
-		pixelSize = 1;
-	}
-
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		// Only one component uses this, so should be safe.
-		JSlider s = gui.getSlider();
-		pixelSize = s.getValue();
 	}
 
 }
